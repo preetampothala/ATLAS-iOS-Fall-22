@@ -233,27 +233,177 @@ for tickMark in 0..<minutes {
    print("render the tick mark each minute \(tickMark) times")
 }
 
+//let finalSquare = 25
+//var board = [Int](repeating: 0, count: finalSquare + 1)
+//
+//board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+//board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+//
+//var square = 0
+//var diceRoll = 0
+//while square < finalSquare {// roll the dice
+//    square += board[square]
+//    diceRoll += 1
+//
+//    if diceRoll == 7 { diceRoll = 1 }// move by the rolled amount
+//    square += diceRoll
+//
+//}
+//print("Game over!")
+
+
+let somePoint = (1, 0)
+switch somePoint {
+case (0, 0):
+    print("\(somePoint) is at the origin")
+case (_, 0):
+    print("\(somePoint) is on the x-axis")
+case (0, _):
+    print("\(somePoint) is on the y-axis")
+case (-2...2, -2...2):
+    print("\(somePoint) is inside the box")
+default:
+    print("\(somePoint) is outside of the box")
+}
+
+let anotherPoint = (0, 2)
+switch anotherPoint {
+case (let x, 0):
+    print("on the x-axis with an x value of \(x)")
+case (0, let y):
+    print("on the y-axis with a y value of \(y)")
+case let (x, y):
+    print("somewhere else at (\(x), \(y))")
+}
+
+let yetAnotherPoint = (-1, 1)
+switch yetAnotherPoint {
+case let (x, y) where x == y:
+    print("(\(x), \(y)) is on the line x == y")
+case let (x, y) where x == -y:
+    print("(\(x), \(y)) is on the line x == -y")
+case let (x, y):
+    print("(\(x), \(y)) is just some arbitrary point")
+}
+
+
+let numberSymbol: Character = "三"  // Chinese symbol for the number 3
+var possibleIntegerValue: Int?
+switch numberSymbol {
+case "1", "١", "一", "๑":
+    possibleIntegerValue = 1
+case "2", "٢", "二", "๒":
+    possibleIntegerValue = 2
+case "3", "٣", "a", "๓":
+    possibleIntegerValue = 3
+case "4", "٤", "四", "๔":
+    possibleIntegerValue = 4
+default:
+    break
+}
+if let integerValue = possibleIntegerValue {
+    print("The integer value of \(numberSymbol) is \(integerValue).")
+} else {
+    print("An integer value couldn't be found for \(numberSymbol).")
+}
+
+let integerToDescribe = 5
+var description = "The number \(integerToDescribe) is"
+switch integerToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += " a prime number, and also"
+    fallthrough
+default:
+    description += " an integer."
+}
+print(description)
+
 let finalSquare = 25
 var board = [Int](repeating: 0, count: finalSquare + 1)
-print(board)
-
 board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
 board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
-print(board)
 var square = 0
 var diceRoll = 0
-while square < finalSquare {
-    // roll the dice
+gameLoop: while square != finalSquare {
     diceRoll += 1
-    print("247 \(diceRoll)")
     if diceRoll == 7 { diceRoll = 1 }
-    // move by the rolled amount
-    square += diceRoll
-    print("251 \(square)")
-    if square < board.count {
-        // if we're still on the board, move up or down for a snake or a ladder
+    switch square + diceRoll {
+    case finalSquare:
+        // diceRoll will move us to the final square, so the game is over
+        break gameLoop
+    case square + diceRoll where square + diceRoll>finalSquare:
+        // diceRoll will move us beyond the final square, so roll again
+//        print(newSquare)
+        continue gameLoop
+    default:
+        // this is a valid move, so find out its effect
+        square += diceRoll
         square += board[square]
-        print("255 \(square)")
     }
 }
 print("Game over!")
+
+//func greet(person:[String: String]){
+//    guard let name=person["name"]
+//    else {
+//
+//        return
+//    }
+//    print("Hello \(name)!")
+//
+//    guard let location=person["location"]
+//    else{
+//        print("Hope the weather is great at your location")
+//        return
+//    }
+//    print("Hope the weather is great in \(location)")
+//}
+//greet(person:["name":"Preetam"])
+//greet(person:["name":"Preetam", "location":"Nellore"])
+
+// functions
+//syntax
+//func functionname(parameter:Type)->Returntype{}
+// functionname(argument:"typecontent")
+
+func greeet(person:String) -> String {
+    let greeting = "Hello, " + person + "!"
+    return greeting
+}
+greeet(person:"Preetam")
+
+
+//func greet(person: String, alreadyGreeted: Bool) -> String {
+//    if alreadyGreeted {
+//        return greetAgain(person: person)
+//    } else {
+//        return greet(person: person)
+//    }
+//}
+//print(greet(person: "Tim", alreadyGreeted: true))
+
+func printAndCount(string: String) -> Int {
+    print(string)
+    return string.count
+}
+func printWithoutCounting(string: String) {
+    let returnedval = printAndCount(string: string)
+    print(returnedval)
+}
+printAndCount(string: "hello, world")
+printWithoutCounting(string: "hellooo, world")
+
+func minMax(array: [Int]) -> (min: Int, max: Int) {
+    var currentMin = array[0]
+    var currentMax = array[0]
+    for value in array[1..<array.count] {
+        if value < currentMin {
+            currentMin = value
+        } else if value > currentMax {
+            currentMax = value
+        }
+    }
+    return (currentMin, currentMax)
+}
+let bounds = minMax(array: [8, -6, 2, 109, 3, 71])
+print("min is \(bounds.min) and max is \(bounds.max) and \(bounds)")
